@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
+import threading
 from contextlib import contextmanager
 
 import psycopg2
@@ -56,7 +57,9 @@ class PrestashopBaseExporter(AbstractComponent):
         self.binder.bind(self.prestashop_id, self.binding)
         # commit so we keep the external ID if several cascading exports
         # are called and one of them fails
-        self.env.cr.commit()  # pylint: disable=invalid-commit
+        # do never commit during tests
+        if not getattr(threading.currentThread(), 'testing', False):
+            self.env.cr.commit()  # pylint: disable=invalid-commit
         self._after_export()
         return result
 
@@ -152,7 +155,10 @@ class PrestashopExporter(AbstractComponent):
                     binding = model_c.create(_bind_values)
                     # Eager commit to avoid having 2 jobs
                     # exporting at the same time.
-                    self._cr.commit()  # pylint: disable=invalid-commit
+                    # do never commit during tests
+                    if not getattr(threading.currentThread(), 'testing',
+                                   False):
+                        self._cr.commit()  # pylint: disable=invalid-commit
         else:
             # If prestashop_bind_ids does not exist we are typically in a
             # "direct" binding (the binding record is the same record).
