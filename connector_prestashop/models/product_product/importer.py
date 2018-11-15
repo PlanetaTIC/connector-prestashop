@@ -275,29 +275,6 @@ class ProductCombinationMapper(Component):
             return {}
 
 
-class ProductCombinationOptionImporter(Component):
-    _name = 'prestashop.product.combination.option.importer'
-    _inherit = 'prestashop.importer'
-    _apply_on = 'prestashop.product.combination.option'
-
-    def _import_values(self, attribute_binding):
-        record = self.prestashop_record
-        option_values = record.get('associations', {}).get(
-            'product_option_values', {}).get(
-            self.backend_record.get_version_ps_key('product_option_value'), [])
-        if not isinstance(option_values, list):
-            option_values = [option_values]
-        for option_value in option_values:
-            self._import_dependency(
-                option_value['id'],
-                'prestashop.product.combination.option.value'
-            )
-
-    def _after_import(self, binding):
-        super(ProductCombinationOptionImporter, self)._after_import(binding)
-        self._import_values(binding)
-
-
 class ProductCombinationOptionMapper(Component):
     _name = 'prestashop.product.combination.option.mapper'
     _inherit = 'prestashop.import.mapper'
@@ -341,6 +318,29 @@ class ProductCombinationOptionMapper(Component):
         else:
             name = record['name']
         return {'name': name}
+
+
+class ProductCombinationOptionImporter(Component):
+    _name = 'prestashop.product.combination.option.importer'
+    _inherit = 'prestashop.importer'
+    _apply_on = 'prestashop.product.combination.option'
+
+    def _import_values(self, attribute_binding):
+        record = self.prestashop_record
+        option_values = record.get('associations', {}).get(
+            'product_option_values', {}).get(
+            self.backend_record.get_version_ps_key('product_option_value'), [])
+        if not isinstance(option_values, list):
+            option_values = [option_values]
+        for option_value in option_values:
+            self._import_dependency(
+                option_value['id'],
+                'prestashop.product.combination.option.value'
+            )
+
+    def _after_import(self, binding):
+        super(ProductCombinationOptionImporter, self)._after_import(binding)
+        self._import_values(binding)
 
 
 class ProductCombinationOptionValueAdapter(Component):
