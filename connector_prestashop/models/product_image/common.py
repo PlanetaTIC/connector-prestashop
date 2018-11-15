@@ -47,8 +47,8 @@ class ProductImageAdapter(Component):
     _inherit = 'prestashop.crud.adapter'
     _apply_on = 'prestashop.product.image'
     _prestashop_image_model = 'products'
-    _prestashop_model = '/images/products'
-    _export_node_name = '/images/products'
+    _prestashop_model = 'images/products'
+    _export_node_name = 'images/products'
     _export_node_name_res = 'image'
     # pylint: disable=method-required-super
 
@@ -83,7 +83,7 @@ class ProductImageAdapter(Component):
         api = self.connect()
         # TODO: odoo logic in the adapter? :-(
         url = '{}/{}'.format(self._prestashop_model, attributes['id_product'])
-        url_del = '{}/{}/{}/{}'.format(
+        url_del = '{}{}/{}/{}'.format(
             api._api_url, self._prestashop_model, attributes['id_product'], id)
         try:
             api._execute(url_del, 'DELETE')
@@ -95,7 +95,7 @@ class ProductImageAdapter(Component):
             base64.b64decode(attributes['content'])
         )])
 
-    def delete(self, resource, id):
+    def delete(self, id):
         """ Delete a record on the external system """
         api = self.connect()
-        return api.delete(resource, resource_ids=id)
+        return api.delete(self._prestashop_model, resource_ids=id)
