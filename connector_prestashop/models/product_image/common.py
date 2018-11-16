@@ -95,7 +95,14 @@ class ProductImageAdapter(Component):
             base64.b64decode(attributes['content'])
         )])
 
-    def delete(self, resource, id):
+    def delete(self, id, attributes=None):
         """ Delete a record on the external system """
+        res = None
         api = self.connect()
-        return api.delete(resource, resource_ids=id)
+        url_del = '{}{}/{}/{}'.format(
+            api._api_url, self._prestashop_model, attributes['id_product'], id)
+        try:
+            res = api._execute(url_del, 'DELETE')
+        except:
+            pass
+        return res
