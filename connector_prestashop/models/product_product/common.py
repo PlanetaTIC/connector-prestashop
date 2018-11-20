@@ -268,6 +268,8 @@ class ProductCombinationAdapter(Component):
     _name = 'prestashop.product.combination.adapter'
     _inherit = 'prestashop.adapter'
     _apply_on = 'prestashop.product.combination'
+
+    _model_name = 'prestashop.product.combination'
     _prestashop_model = 'combinations'
     _export_node_name = 'combination'
 
@@ -277,6 +279,7 @@ class ProductCombinationOptionAdapter(Component):
     _inherit = 'prestashop.adapter'
     _apply_on = 'prestashop.product.combination.option'
 
+    _model_name = 'prestashop.product.combination.option'
     _prestashop_model = 'product_options'
     _export_node_name = 'product_options'
 
@@ -286,5 +289,6 @@ class ProductCombinationOptionValueAdapter(Component):
     _inherit = 'prestashop.adapter'
     _apply_on = 'prestashop.product.combination.option.value'
 
+    _model_name = 'prestashop.product.combination.option.value'
     _prestashop_model = 'product_option_values'
     _export_node_name = 'product_option_value'

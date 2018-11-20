@@ -22,6 +22,8 @@ class ProductCombinationImporter(Component):
     _inherit = 'prestashop.importer'
     _apply_on = 'prestashop.product.combination'
 
+    _model_name = 'prestashop.product.combination'
+
     def _import_dependencies(self):
         record = self.prestashop_record
         ps_key = self.backend_record.get_version_ps_key('product_option_value')
@@ -101,6 +103,8 @@ class ProductCombinationMapper(Component):
     _name = 'prestashop.product.combination.mapper'
     _inherit = 'prestashop.import.mapper'
     _apply_on = 'prestashop.product.combination'
+
+    _model_name = 'prestashop.product.combination'
 
     direct = [
     ]
@@ -280,6 +284,8 @@ class ProductCombinationOptionMapper(Component):
     _inherit = 'prestashop.import.mapper'
     _apply_on = 'prestashop.product.combination.option'
 
+    _model_name = 'prestashop.product.combination.option'
+
     direct = []
 
     @mapping
@@ -324,6 +330,7 @@ class ProductCombinationOptionImporter(Component):
     _name = 'prestashop.product.combination.option.importer'
     _inherit = 'prestashop.importer'
     _apply_on = 'prestashop.product.combination.option'
+    _model_name = 'prestashop.product.combination.option'
 
     def _import_values(self, attribute_binding):
         record = self.prestashop_record
@@ -343,29 +350,11 @@ class ProductCombinationOptionImporter(Component):
         self._import_values(binding)
 
 
-class ProductCombinationOptionValueAdapter(Component):
-    _name = 'prestashop.product.combination.option.value.adapter'
-    _inherit = 'prestashop.adapter'
-    _apply_on = 'prestashop.product.combination.option.value'
-
-    _prestashop_model = 'product_option_values'
-    _export_node_name = 'product_option_value'
-
-
-class ProductCombinationOptionValueImporter(Component):
-    _name = 'prestashop.product.combination.option.value.importer'
-    _inherit = 'prestashop.translatable.record.importer'
-    _apply_on = 'prestashop.product.combination.option.value'
-
-    _translatable_fields = {
-        'prestashop.product.combination.option.value': ['name'],
-    }
-
-
 class ProductCombinationOptionValueMapper(Component):
     _name = 'prestashop.product.combination.option.value.mapper'
     _inherit = 'prestashop.import.mapper'
     _apply_on = 'prestashop.product.combination.option.value'
+    _model_name = 'prestashop.product.combination.option.value'
 
     direct = [
         ('name', 'name'),
@@ -402,7 +391,20 @@ class ProductCombinationOptionValueMapper(Component):
         return {'backend_id': self.backend_record.id}
 
 
+class ProductCombinationOptionValueImporter(Component):
+    _name = 'prestashop.product.combination.option.value.importer'
+    _inherit = 'prestashop.translatable.record.importer'
+    _apply_on = 'prestashop.product.combination.option.value'
+
+    _model_name = 'prestashop.product.combination.option.value'
+    _translatable_fields = {
+        'prestashop.product.combination.option.value': ['name'],
+    }
+
+
 class ProductProductBatchImporter(Component):
     _name = 'prestashop.product.combination.batch.importer'
     _inherit = 'prestashop.delayed.batch.importer'
     _apply_on = 'prestashop.product.combination'
+
+    _model_name = 'prestashop.product.combination'

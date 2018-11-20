@@ -6,6 +6,10 @@ from ...components.deleter import PrestashopDeleter
 
 
 class ProductCombinationDelete(PrestashopDeleter):
+    _name = 'prestashop.product.combination.deleter'
+    _inherit = 'prestashop.deleter'
+    _apply_on = 'prestashop.product.combination'
+
     _model_name = 'prestashop.product.combination'
 
     def delete(self, id):
