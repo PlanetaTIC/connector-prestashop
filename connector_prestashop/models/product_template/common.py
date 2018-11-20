@@ -272,6 +272,8 @@ class PrestashopProductQuantityListener(Component):
     _apply_on = ['prestashop.product.combination',
                  'prestashop.product.template']
 
+    _usage = 'product.inventory.listener'
+
     def _get_inventory_fields(self):
         # fields which should not trigger an export of the products
         # but an export of their inventory
