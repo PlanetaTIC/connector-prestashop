@@ -14,16 +14,14 @@ class PrestashopDeleter(AbstractComponent):
     _inherit = 'base.deleter'
     _usage = 'record.exporter.deleter'
 
-    def run(self, binding):
+    def run(self, model_name, prestashop_id, record=None):
         """ Run the synchronization
 
         :param binding_id: identifier of the binding record to export
         """
-        self.binding_id = binding.id
-        self.binding = binding
-        self.prestashop_id = binding.prestashop_id
+        self.prestashop_id = prestashop_id
 
-        result = self._run()
+        result = self._run(prestashop_id, record)
 
         # commit so we keep the external ID removed if several cascading
         # exports are called and one of them fails
