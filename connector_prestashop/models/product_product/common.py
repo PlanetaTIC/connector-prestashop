@@ -24,6 +24,10 @@ class ProductProduct(models.Model):
         digits=dp.get_precision('Product Price')
     )
 
+    image_ids = fields.One2many(
+        inverse=False,
+    )
+
     @api.multi
     def update_prestashop_qty(self):
         for product in self:

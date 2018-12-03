@@ -73,11 +73,14 @@ class ProductImageAdapter(Component):
         api = self.connect()
         # TODO: odoo logic in the adapter? :-(
         url = '{}/{}'.format(self._prestashop_model, attributes['id_product'])
-        return api.add(url, files=[(
+        res = api.add(url, files=[(
             'image',
             attributes['filename'].encode('utf-8'),
             base64.b64decode(attributes['content'])
         )])
+        if self._export_node_name_res:
+            return res['prestashop'][self._export_node_name_res]['id']
+        return res
 
     def write(self, id, attributes=None):
         api = self.connect()
@@ -89,11 +92,14 @@ class ProductImageAdapter(Component):
             api._execute(url_del, 'DELETE')
         except:
             pass
-        return api.add(url, files=[(
+        res = api.add(url, files=[(
             'image',
             attributes['filename'].encode('utf-8'),
             base64.b64decode(attributes['content'])
         )])
+        if self._export_node_name_res:
+            return res['prestashop'][self._export_node_name_res]['id']
+        return res
 
     def delete(self, id, attributes=None):
         """ Delete a record on the external system """
