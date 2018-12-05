@@ -41,6 +41,13 @@ class PrestashopProductImage(models.Model):
             importer = work.component(usage='record.importer')
             return importer.run(product_tmpl_id, image_id)
 
+    def get_map_record_vals(self):
+        with self.backend_id.work_on('prestashop.product.image') as work:
+            exporter = work.component(usage='record.exporter')
+            map_record = exporter.mapper.map_record(self)
+            record_vals = map_record.values()
+        return record_vals
+
 
 class ProductImageAdapter(Component):
     _name = 'prestashop.product.image.adapter'
@@ -101,12 +108,13 @@ class ProductImageAdapter(Component):
             return res['prestashop'][self._export_node_name_res]['id']
         return res
 
-    def delete(self, id, attributes=None):
+    def delete(self, prestashop_id, attributes=None):
         """ Delete a record on the external system """
         res = None
         api = self.connect()
         url_del = '{}{}/{}/{}'.format(
-            api._api_url, self._prestashop_model, attributes['id_product'], id)
+            api._api_url, self._prestashop_model, attributes['id_product'],
+            prestashop_id)
         try:
             res = api._execute(url_del, 'DELETE')
         except:

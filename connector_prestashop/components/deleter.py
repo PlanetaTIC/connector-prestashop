@@ -3,7 +3,6 @@
 
 import threading
 
-from odoo.tools.translate import _
 from odoo.addons.component.core import AbstractComponent
 
 
@@ -14,14 +13,12 @@ class PrestashopDeleter(AbstractComponent):
     _inherit = 'base.deleter'
     _usage = 'record.exporter.deleter'
 
-    def run(self, model_name, prestashop_id, record=None):
+    def run(self, prestashop_id, record=None):
         """ Run the synchronization
-
-        :param binding_id: identifier of the binding record to export
         """
         self.prestashop_id = prestashop_id
 
-        result = self._run(prestashop_id, record)
+        result = self._run(record=record)
 
         # commit so we keep the external ID removed if several cascading
         # exports are called and one of them fails
