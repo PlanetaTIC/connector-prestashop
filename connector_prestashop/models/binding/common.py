@@ -69,12 +69,13 @@ class PrestashopBinding(models.AbstractModel):
             return exporter.run(self, fields)
 
     @job(default_channel='root.prestashop')
-    def export_delete_record(self, model_name, backend, prestashop_id, record):
+    def export_delete_record(self, binding_model_name, backend, prestashop_id,
+                             record_vals=None):
         """ Delete a record on PrestaShop """
         self.check_active(backend)
-        with backend.work_on(model_name) as work:
+        with backend.work_on(binding_model_name) as work:
             deleter = work.component(usage='record.exporter.deleter')
-            return deleter.run(self, prestashop_id, record)
+            return deleter.run(prestashop_id, record_vals)
 
     # TODO: Research
     @api.multi
@@ -86,14 +87,8 @@ class PrestashopBinding(models.AbstractModel):
             func(record.backend_id, record.prestashop_id)
         return True
 
-
-@job(default_channel='root.prestashop')
-def export_delete_record(prestashop_binding_obj, backend, model_name, prestashop_id, map_record):
-    """ Delete a record on PrestaShop """
-    prestashop_binding_obj.check_active(backend)
-    with backend.work_on(model_name) as work:
-        deleter = work.component(usage='record.exporter.deleter')
-        return deleter.run(prestashop_binding_obj, prestashop_id)
+    def get_map_record_vals(self):
+        return None
 
 
 class PrestashopBindingOdoo(models.AbstractModel):
