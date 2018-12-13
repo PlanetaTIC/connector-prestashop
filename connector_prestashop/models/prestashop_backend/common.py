@@ -283,7 +283,8 @@ class PrestashopBackend(models.Model):
     def import_products(self):
         for backend_record in self:
             since_date = backend_record.import_products_since
-            self.env['prestashop.product.template'].import_products(backend_record, since_date)
+            self.env['prestashop.product.template'].with_delay(
+                ).import_products(backend_record, since_date)
         return True
 
     @api.multi
