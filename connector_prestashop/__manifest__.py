@@ -19,6 +19,7 @@
         "purchase",
         "product_variant_supplierinfo",  # oca/product-variant
         "stock_available",  # stock-logistics-warehouse
+        "product_brand",  # oca/product-attribute
         # TODO: perhaps not needed:
         # "product_variant_cost_price",  # oca/product-variant
     ],
