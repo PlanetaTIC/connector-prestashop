@@ -54,10 +54,12 @@ class ProductImageExporter(Component):
         api = PrestaShopWebServiceImage(
             api_url=self.backend_record.location,
             api_key=self.backend_record.webservice_key)
-        full_public_url = api.get_image_public_url({
+        record = {
             'id_image': str(self.prestashop_id),
             'type': 'image/jpeg',
-        })
+            'size': self.backend_record.image_size or None,
+        }
+        full_public_url = api.get_image_public_url(record)
         if self.binding.url != full_public_url:
             self.binding.with_context(connector_no_export=True).write({
                 'url': full_public_url,

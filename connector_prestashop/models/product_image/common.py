@@ -73,7 +73,8 @@ class ProductImageAdapter(Component):
             self._prestashop_image_model,
             product_tmpl_id,
             image_id,
-            options=options
+            options=options,
+            size=self.backend_record.image_size or None,
         )
 
     def create(self, attributes=None):

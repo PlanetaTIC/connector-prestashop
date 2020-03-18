@@ -163,6 +163,10 @@ class PrestashopBackend(models.Model):
         help="The timezone of the backend. Used to synchronize the sale order "
         "date.")
 
+    image_size = fields.Char(
+        'Image size',
+        help="Use this PrestaShop size for Odoo images")
+
     @api.onchange("matching_customer")
     def change_matching_customer(self):
         # Update the field list so that if you API change you could find the

@@ -54,12 +54,14 @@ def api_handle_errors(message=''):
 class PrestaShopWebServiceImage(PrestaShopWebServiceDict):
 
     def get_image(self, resource, resource_id=None, image_id=None,
-                  options=None):
+                  options=None, size=None):
         full_url = self._api_url + 'images/' + resource
         if resource_id is not None:
             full_url += "/%s" % (resource_id,)
             if image_id is not None:
                 full_url += "/%s" % (image_id)
+                if size is not None:
+                    full_url += "/%s" % (size)
         if options is not None:
             self._validate_query_options(options)
             full_url += "?%s" % (self._options_to_querystring(options),)
@@ -74,6 +76,7 @@ class PrestaShopWebServiceImage(PrestaShopWebServiceDict):
             'content': image_content,
             'id_' + resource[:-1]: resource_id,
             'id_image': image_id,
+            'size': size,
         }
         record['full_public_url'] = self.get_image_public_url(record)
         return record
@@ -81,10 +84,10 @@ class PrestaShopWebServiceImage(PrestaShopWebServiceDict):
     def get_image_public_url(self, record):
         url = self._api_url.replace('/api', '')
         url += '/img/p/' + '/'.join(list(record['id_image']))
-        extension = ''
-        if record['type'] == 'image/jpeg':
-            extension = '.jpg'
-        url += '/' + record['id_image'] + extension
+        url += '/%s' % record['id_image']
+        if record.get('size'):
+            url += '-%s' % record['size']
+        url += '.jpg'
         return url
 
 

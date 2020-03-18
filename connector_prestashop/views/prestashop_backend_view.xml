@@ -179,7 +179,12 @@
                         </page>
                         <page string="Options">
                             <group string="Options" col="4">
-                                <field name="quantity_field" colspan="4" />
+                                <group>
+                                    <field name="quantity_field" />
+                                </group>
+                                <group>
+                                    <field name="image_size" />
+                                </group>
                             </group>
                             <group colspan="4">
                                 <group string="Matching option for Product">
