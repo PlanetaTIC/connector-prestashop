@@ -129,6 +129,12 @@ class PrestashopProductTemplate(models.Model):
     )
     low_stock_threshold = fields.Integer(string='Low Stock Threshold')
     low_stock_alert = fields.Boolean(string='Low Stock Alert')
+    visibility = fields.Selection(string='Visibility', selection=[
+        ('both', 'All shop'),
+        ('catalog', 'Only Catalog'),
+        ('search', 'Only search results'),
+        ('none', 'Hidden'),
+    ], default='both')
 
     @api.multi
     def recompute_prestashop_qty(self):
