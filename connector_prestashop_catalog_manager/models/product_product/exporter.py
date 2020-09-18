@@ -3,6 +3,7 @@
 
 from odoo.addons.connector.components.mapper import mapping, changed_by
 from odoo.addons.component.core import Component
+from collections import OrderedDict
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -157,16 +158,41 @@ class ProductCombinationExportMapper(Component):
     @changed_by('attribute_value_ids', 'image_ids')
     @mapping
     def associations(self, record):
-        return {
-            'associations': {
-                'product_option_values': {
-                    'product_option_value': self._get_product_option_value(
-                        record)
-                },
-                'images': {
-                    'image': self._get_combination_image(record)
-                }
+        associations = {
+            'images': {
+                'image': self._get_combination_image(record),
             }
+        }
+        # Read from Prestashop combination's product_option_value
+        # to check if differ:
+        ps_option_value_ids = []
+        ps_option_value_key = self.backend_record.get_version_ps_key(
+                            'product_option_value')
+        if record.prestashop_id:
+            with self.backend_record.work_on(
+                    'prestashop.product.combination') as work:
+                importer = work.component(usage='record.importer')
+                importer.prestashop_id = record.prestashop_id
+                ps_data = importer._get_prestashop_data()
+                ps_option_values = ps_data.get('associations', {}).get(
+                    'product_option_values', {}).get(ps_option_value_key, {})
+                if ps_option_values:
+                    ps_option_value_ids = [int(opt['id']) for
+                                           opt in ps_option_values]
+        ps_option_value_ids.sort()
+        odoo_option_values = self._get_product_option_value(record)
+        odoo_option_values_ids = [opt['id'] for opt in odoo_option_values]
+        odoo_option_values_ids.sort()
+        product_option_values_differ = False
+        if odoo_option_values_ids != ps_option_value_ids:
+            product_option_values_differ = True
+        if product_option_values_differ:
+            associations['product_option_values'] = {
+                ps_option_value_key: odoo_option_values,
+            }
+        return {
+            'associations': OrderedDict(
+                sorted(associations.items(), reverse=True)),
         }
 
 

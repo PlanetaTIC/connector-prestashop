@@ -41,6 +41,47 @@ class ProductCombinationImporter(Component):
                 option_value['id'],
                 'prestashop.product.combination.option.value')
 
+        associations = record.get('associations', {})
+        ps_images = associations.get('images', {}).get(
+            self.backend_record.get_version_ps_key('image'), {})
+        binder = self.binder_for('prestashop.product.image')
+        if not isinstance(ps_images, list):
+            ps_images = [ps_images]
+        if 'id' in ps_images[0]:
+            images = [
+                binder.to_internal(x.get('id'), unwrap=True)
+                for x in ps_images
+            ]
+        else:
+            images = []
+        if not images:
+            # get all images of product.template:
+            ps_product_id = record['id_product']
+            with self.backend_record.work_on(
+                    'prestashop.product.template') as work:
+                importer = work.component(usage='record.importer')
+                importer.prestashop_id = ps_product_id
+                ps_product_data = importer._get_prestashop_data()
+                ps_images = ps_product_data.get('associations', {}).get(
+                    'images', {}).get(
+                        self.backend_record.get_version_ps_key('image'), {})
+                if not isinstance(ps_images, list):
+                    ps_images = [ps_images]
+                if 'id' in ps_images[0]:
+                    images = [
+                        binder.to_internal(x.get('id'), unwrap=True)
+                        for x in ps_images
+                    ]
+        if images:
+            product_binder = self.binder_for(
+                'prestashop.product.combination')
+            product_product = product_binder.to_internal(
+                record['id'], unwrap=True)
+            for image in images:
+                image.with_context(
+                    connector_no_export=True).write(
+                    {'product_variant_ids': [(4, product_product.id, False)]})
+
     def _after_import(self, binding):
         super(ProductCombinationImporter, self)._after_import(binding)
         self.import_supplierinfo(binding)

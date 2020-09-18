@@ -580,6 +580,18 @@ class ProductTemplateImporter(Component):
 
     def import_combinations(self):
         prestashop_record = self._get_prestashop_data()
+        # Reset images product_variant_ids:
+        # Importation of Combination will set product_variant_ids again
+        binder = self.binder_for('prestashop.product.template')
+        product_template = binder.to_internal(
+            prestashop_record['id'], unwrap=True)
+        for image in product_template.image_ids:
+            image.with_context(
+                connector_no_export=True).write({
+                    'product_variant_ids': [(6, False, [])],
+                })
+        #
+
         associations = prestashop_record.get('associations', {})
 
         ps_key = self.backend_record.get_version_ps_key('combinations')
