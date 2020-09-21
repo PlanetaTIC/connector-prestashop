@@ -118,6 +118,7 @@ class ProductCombinationExportMapper(Component):
     def main_template_id(self, record):
         return {'id_product': self.get_main_template_id(record)}
 
+    @changed_by('impact_price')
     @mapping
     def _unit_price_impact(self, record):
         tax = record.taxes_id[:1]
