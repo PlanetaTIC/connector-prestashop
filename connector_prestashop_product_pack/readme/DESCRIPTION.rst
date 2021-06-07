@@ -1,0 +1,1 @@
+This module permits you to import Prestashop porduct_bundle products as product_pack product into Odoo.
