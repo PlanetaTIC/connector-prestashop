@@ -29,8 +29,13 @@ class TemplateMapper(Component):
                 ps_packed_product['id'],
                 unwrap=True,
             )
-            # TODO: What will happen with product.combinations?
-            packed_product = packed_product_tmpl.product_variant_ids[0]
+            if ps_packed_product.get('id_product_attribute', '0') == '0':
+                packed_product = packed_product_tmpl.product_variant_ids[0]
+            else:
+                # get product combination:
+                binder = self.binder_for('prestashop.product.combination')
+                packed_product = binder.to_internal(
+                    ps_packed_product['id_product_attribute'])
             pack_line_vals = {
                 'product_id': packed_product.id,
                 'quantity': ps_packed_product['quantity'],
