@@ -113,7 +113,8 @@ class ProductCombinationMapper(Component):
         combination_weight = float(record.get('weight', '0.0'))
         if not hasattr(self.work, 'parent_presta_record'):
             presta_product_tmpl = prestashop_product_tmpl_obj.search([
-                ('prestashop_id', '=', record['id_product'])])
+                ('prestashop_id', '=', record['id_product']),
+                ('backend_id', '=', self.backend_record.id)])
             main_weight = presta_product_tmpl.weight
         else:
             main_weight = float(
