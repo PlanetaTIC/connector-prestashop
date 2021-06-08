@@ -26,12 +26,11 @@ class ProductTemplateImporter(Component):
         if not isinstance(bundle, list):
             bundle = [bundle]
         for ps_packed_product in bundle:
-            if ps_packed_product.get('id_product_attribute', '0') == '0':
-                self._import_dependency(
-                    ps_packed_product['id'],
-                    'prestashop.product.template',
-                    always=True)
-            else:
+            self._import_dependency(
+                ps_packed_product['id'],
+                'prestashop.product.template',
+                always=True)
+            if ps_packed_product.get('id_product_attribute', '0') != '0':
                 self._import_dependency(
                     ps_packed_product['id_product_attribute'],
                     'prestashop.product.combination',
