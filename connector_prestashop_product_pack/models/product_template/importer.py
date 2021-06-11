@@ -55,9 +55,11 @@ class ProductTemplateImporter(Component):
         pack_lines_vals = [(5, False, False)]
         pack_ok = False
         pack_type = False
+        pack_component_price = False
         for ps_packed_product in bundle:
             pack_ok = True
-            pack_type = 'non_detailed'
+            pack_type = 'detailed'
+            pack_component_price = 'ignored'
 
             packed_product_tmpl = template_binder.to_internal(
                 ps_packed_product['id'],
@@ -77,7 +79,8 @@ class ProductTemplateImporter(Component):
         binding.odoo_id.write({
             'pack_ok': pack_ok,
             'pack_type': pack_type,
-            'pack_line_ids': pack_lines_vals
+            'pack_line_ids': pack_lines_vals,
+            'pack_component_price': pack_component_price,
         })
 
 
