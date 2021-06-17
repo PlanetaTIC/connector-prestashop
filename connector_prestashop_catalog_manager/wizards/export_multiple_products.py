@@ -10,6 +10,10 @@ try:
     import slugify as slugify_lib
 except ImportError:
     slugify_lib = None
+try:
+    from _functools import reduce
+except ImportError:
+    pass
 
 
 def get_slug(name):
