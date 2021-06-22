@@ -28,13 +28,11 @@ class ProductTemplateImporter(Component):
         for ps_packed_product in bundle:
             self._import_dependency(
                 ps_packed_product['id'],
-                'prestashop.product.template',
-                always=True)
+                'prestashop.product.template')
             if ps_packed_product.get('id_product_attribute', '0') != '0':
                 self._import_dependency(
                     ps_packed_product['id_product_attribute'],
-                    'prestashop.product.combination',
-                    always=True)
+                    'prestashop.product.combination')
 
     def _after_import(self, binding):
         super(ProductTemplateImporter, self)._after_import(binding)
