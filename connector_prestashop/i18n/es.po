@@ -5631,6 +5631,12 @@ msgid "Total tax in PrestaShop"
 msgstr "Total tax in PrestaShop"
 
 #. module: connector_prestashop
+#: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_sale_order__total_wrapping_tax_excluded
+#: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_sale_order__total_wrapping_tax_included
+msgid "Total wrapping in PrestaShop"
+msgstr "Total de embalaje en Prestashop"
+
+#. module: connector_prestashop
 #: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_delivery_carrier_track_service
 #: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_product_combination_track_service
 #: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_product_template_track_service
@@ -5698,6 +5704,12 @@ msgstr "Unidad de medida"
 #: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_supplier_message_unread
 msgid "Unread Messages"
 msgstr "Mensajes por leer"
+
+#. module: connector_prestashop
+#: model:product.product,uom_name:connector_prestashop.product_product_wrapping
+#: model:product.template,uom_name:connector_prestashop.product_product_wrapping_product_template
+msgid "Unit(s)"
+msgstr "Unidad(es)"
 
 #. module: connector_prestashop
 #: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_address_message_unread_counter
@@ -5990,6 +6002,12 @@ msgid "When this field is filled in, the vendor data will onlyapply to the varia
 msgstr "When this field is filled in, the vendor data will onlyapply to the variant."
 
 #. module: connector_prestashop
+#: model:product.product,name:connector_prestashop.product_product_wrapping
+#: model:product.template,name:connector_prestashop.product_product_wrapping_product_template
+msgid "Wrapping"
+msgstr "Embalaje"
+
+#. module: connector_prestashop
 #: model:ir.model.fields,help:connector_prestashop.field_prestashop_res_country_address_format
 msgid "You can state here the usual format to use for the addresses belonging to this country.\n"
 "\n"
@@ -6013,6 +6031,11 @@ msgstr "Puede colocar aquí el formato habitual que se usa en las direcciones pe
 "%(country_name)s: para el nombre del país\n"
 "\n"
 "%(country_code)s: para el código del país"
+
+#. module: connector_prestashop
+#: model:ir.model.fields,field_description:connector_prestashop.field_prestashop_backend__wrapping_product_id
+msgid "Wrapping Product"
+msgstr "Producto de embalaje"
 
 #. module: connector_prestashop
 #: model:ir.model.fields,help:connector_prestashop.field_prestashop_backend_webservice_key
@@ -6065,6 +6088,12 @@ msgstr "_prestashop_product_tag"
 #: model:ir.model,name:connector_prestashop.model_account_tax_group
 msgid "account.tax.group"
 msgstr "account.tax.group"
+
+#. module: connector_prestashop
+#: model:product.product,weight_uom_name:connector_prestashop.product_product_wrapping
+#: model:product.template,weight_uom_name:connector_prestashop.product_product_wrapping_product_template
+msgid "kg"
+msgstr ""
 
 #. module: connector_prestashop
 #: model:ir.model,name:connector_prestashop.model_base_multi_image_image

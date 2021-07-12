@@ -133,6 +133,12 @@ class PrestashopBackend(models.Model):
         string='State',
         default='draft'
     )
+    wrapping_product_id = fields.Many2one(
+        comodel_name='product.product',
+        index=True,
+        required=True,
+        string='Wrapping Product',
+    )
 
     verbose = fields.Boolean(help="Output requests details in the logs")
     debug = fields.Boolean(help="Activate PrestaShop's webservice debug mode")

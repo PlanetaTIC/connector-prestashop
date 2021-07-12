@@ -19,6 +19,31 @@ class SaleOrder(models.Model):
         string='PrestaShop Bindings',
     )
 
+    def _create_wrapping_line(self, product, price_unit):
+        SaleOrderLine = self.env['sale.order.line']
+        if self.partner_id:
+            # set delivery detail in the customer language
+            product = product.with_context(lang=self.partner_id.lang)
+
+        # Apply fiscal position
+        taxes = product.taxes_id.filtered(lambda t: t.company_id.id == self.company_id.id)
+        taxes_ids = taxes.ids
+        if self.partner_id and self.fiscal_position_id:
+            taxes_ids = self.fiscal_position_id.map_tax(taxes, product, self.partner_id).ids
+
+        values = {
+            'order_id': self.id,
+            'product_uom_qty': 1,
+            'product_uom': product.uom_id.id,
+            'product_id': product.id,
+            'price_unit': price_unit,
+            'tax_id': [(6, 0, taxes_ids)],
+        }
+        if self.order_line:
+            values['sequence'] = self.order_line[-1].sequence + 1
+        sol = SaleOrderLine.sudo().create(values)
+        return sol
+
 
 class PrestashopSaleOrder(models.Model):
     _name = 'prestashop.sale.order'
@@ -61,6 +86,16 @@ class PrestashopSaleOrder(models.Model):
     )
     total_shipping_tax_excluded = fields.Float(
         string='Total shipping in PrestaShop',
+        digits=dp.get_precision('Account'),
+        readonly=True,
+    )
+    total_wrapping_tax_included = fields.Float(
+        string='Total wrapping in PrestaShop',
+        digits=dp.get_precision('Account'),
+        readonly=True,
+    )
+    total_wrapping_tax_excluded = fields.Float(
+        string='Total wrapping in PrestaShop',
         digits=dp.get_precision('Account'),
         readonly=True,
     )

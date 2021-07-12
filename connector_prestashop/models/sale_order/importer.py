@@ -146,7 +146,9 @@ class SaleOrderImportMapper(Component):
         ('delivery_number', 'prestashop_delivery_number'),
         ('total_paid', 'total_amount'),
         ('total_shipping_tax_incl', 'total_shipping_tax_included'),
-        ('total_shipping_tax_excl', 'total_shipping_tax_excluded')
+        ('total_shipping_tax_excl', 'total_shipping_tax_excluded'),
+        ('total_wrapping_tax_incl', 'total_wrapping_tax_included'),
+        ('total_wrapping_tax_excl', 'total_wrapping_tax_excluded'),
     ]
 
     def _get_sale_order_lines(self, record):
@@ -362,6 +364,17 @@ class SaleOrderImporter(Component):
             )
         binding.odoo_id.recompute()
 
+    def _add_wrapping_line(self, binding):
+        wrapping_total = (binding.total_wrapping_tax_included
+                          if self.backend_record.taxes_included
+                          else binding.total_wrapping_tax_excluded)
+        if wrapping_total:
+            binding.odoo_id._create_wrapping_line(
+                binding.backend_id.wrapping_product_id,
+                wrapping_total
+            )
+        binding.odoo_id.recompute()
+
     def _create(self, data):
         binding = super(SaleOrderImporter, self)._create(data)
         if binding.fiscal_position_id:
@@ -371,6 +384,7 @@ class SaleOrderImporter(Component):
     def _after_import(self, binding):
         super(SaleOrderImporter, self)._after_import(binding)
         self._add_shipping_line(binding)
+        self._add_wrapping_line(binding)
         self.checkpoint_line_without_template(binding)
 
     def checkpoint_line_without_template(self, binding):
