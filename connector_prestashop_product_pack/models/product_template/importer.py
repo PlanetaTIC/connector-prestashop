@@ -54,10 +54,12 @@ class ProductTemplateImporter(Component):
         pack_ok = False
         pack_type = False
         pack_component_price = False
+        product_type = 'product'
         for ps_packed_product in bundle:
             pack_ok = True
             pack_type = 'detailed'
             pack_component_price = 'ignored'
+            product_type = 'consu'
 
             packed_product_tmpl = template_binder.to_internal(
                 ps_packed_product['id'],
@@ -79,4 +81,5 @@ class ProductTemplateImporter(Component):
             'pack_type': pack_type,
             'pack_line_ids': pack_lines_vals,
             'pack_component_price': pack_component_price,
+            'type': product_type,
         })
